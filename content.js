@@ -1,7 +1,5 @@
 // Fullscreen scrolling attr + bottom-center "scroll to top" button
-// User-config: on/off (button), duration (ms), show-after-threshold (px).
-// Optional: Direct Fullscreen Sync — coalesce to a single smooth step (targets <ytd-app> so scrolling still works).
-// Fullscreen timing popup (bottom-center frosted pill) when enabled.
+// User-config: on/off, duration (ms), and show-after-threshold (px). Works in fullscreen too.
 
 (function () {
   const doc = document;
@@ -11,22 +9,15 @@
   const settings = {
     showScrollTop: true,
     scrollDuration: 500,
-    scrollShowThreshold: 120,
-    enableFullscreenSync: false,
-    enableFsToast: false
+    scrollShowThreshold: 120
   };
 
-  chrome.storage.sync.get(
-    ['showScrollTop', 'scrollDuration', 'scrollShowThreshold', 'enableFullscreenSync', 'enableFsToast'],
-    (res) => {
-      if (typeof res.showScrollTop === 'boolean') settings.showScrollTop = res.showScrollTop;
-      if (Number.isFinite(res.scrollDuration)) settings.scrollDuration = res.scrollDuration;
-      if (Number.isFinite(res.scrollShowThreshold)) settings.scrollShowThreshold = res.scrollShowThreshold;
-      if (typeof res.enableFullscreenSync === 'boolean') settings.enableFullscreenSync = res.enableFullscreenSync;
-      if (typeof res.enableFsToast === 'boolean') settings.enableFsToast = res.enableFsToast;
-      init();
-    }
-  );
+  chrome.storage.sync.get(['showScrollTop', 'scrollDuration', 'scrollShowThreshold'], (res) => {
+    if (typeof res.showScrollTop === 'boolean') settings.showScrollTop = res.showScrollTop;
+    if (Number.isFinite(res.scrollDuration)) settings.scrollDuration = res.scrollDuration;
+    if (Number.isFinite(res.scrollShowThreshold)) settings.scrollShowThreshold = res.scrollShowThreshold;
+    init();
+  });
 
   chrome.storage.onChanged.addListener((changes, area) => {
     if (area !== 'sync') return;
@@ -45,12 +36,6 @@
         updateButtonVisibility();
       }
     }
-    if ('enableFullscreenSync' in changes) {
-      settings.enableFullscreenSync = !!changes.enableFullscreenSync.newValue;
-    }
-    if ('enableFsToast' in changes) {
-      settings.enableFsToast = !!changes.enableFsToast.newValue;
-    }
   });
 
   // ---- Fullscreen scrolling attr ----
@@ -58,12 +43,12 @@
   function applyScrollingAttr() {
     const app = getApp();
     if (!app) return;
-    const isFs = !!doc.fullscreenElement || app.hasAttribute('fullscreen');
-    if (isFs) app.setAttribute('scrolling', '');
+    const isFullscreen = !!doc.fullscreenElement || app.hasAttribute('fullscreen');
+    if (isFullscreen) app.setAttribute('scrolling', '');
     else app.removeAttribute('scrolling');
   }
 
-  // ---- Scroll-to-top button ----
+  // ---- Button creation / toggle ----
   function ensureScrollTopButton() {
     let btn = doc.getElementById('ytfs-scroll-top-btn');
     if (btn) return btn;
@@ -78,6 +63,8 @@
         <path d="M7.41 15.59 12 11l4.59 4.59L18 14.17 12 8l-6 6z"></path>
       </svg>
     `;
+
+    // Shield events so YT overlay doesn't swallow them in fullscreen
     btn.addEventListener('pointerdown', (e) => { e.stopPropagation(); }, true);
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -167,7 +154,7 @@
       const startTime = performance.now();
       (function animate(now) {
         const t = Math.min(1, (now - startTime) / duration);
-        const ease = 1 - Math.pow(1 - t, 3);
+        const ease = 1 - Math.pow(1 - t, 3); // ease-out cubic
         const newTop = startTop * (1 - ease);
         try {
           if (typeof target.scrollTo === 'function') target.scrollTo(0, newTop);
@@ -209,127 +196,10 @@
     }
   }
 
-  // =======================
-  // Direct Fullscreen Sync (+ timing popup)
-  // =======================
-  // IMPORTANT: Target <ytd-app> for browser fullscreen so page remains scrollable.
-  function getFullscreenTarget() {
-    return (
-      doc.querySelector('ytd-app') ||  // prefer app -> preserves scrolling
-      doc.documentElement              // fallback
-    );
-  }
-  function isBrowserFullscreen() { return !!doc.fullscreenElement; }
-
-  // Timing state
-  let lastFsClickTime = 0;
-  let awaitingTiming = false;
-
-  // Styled toast (matches button style; uses CSS .shown)
-  function ensureFsToastEl() {
-    let el = doc.getElementById('ytfs-fs-toast');
-    if (!el) {
-      el = doc.createElement('div');
-      el.id = 'ytfs-fs-toast';
-      el.textContent = '';
-      doc.documentElement.appendChild(el);
-    }
-    return el;
-  }
-  function showFsToastMs(ms) {
-    if (!settings.enableFsToast) return;
-    const el = ensureFsToastEl();
-    el.textContent = `${ms} ms`;
-    el.classList.add('shown');
-    clearTimeout(showFsToastMs._t);
-    showFsToastMs._t = setTimeout(() => el.classList.remove('shown'), 1200);
-  }
-
-  function requestBrowserFullscreenNow() {
-    if (isBrowserFullscreen()) return;
-    const target = getFullscreenTarget();
-    if (!target || !target.requestFullscreen) return;
-    try { target.requestFullscreen({ navigationUI: 'hide' }).catch(() => {}); } catch {}
-  }
-  function exitBrowserFullscreenNow() {
-    if (!isBrowserFullscreen()) return;
-    if (typeof doc.exitFullscreen === 'function') {
-      try { doc.exitFullscreen().catch?.(() => {}); } catch {}
-    }
-  }
-
-  // Intercept clicks on YouTube's fullscreen button and coalesce to one step.
-  // We run our request/exit in a microtask (setTimeout 0) so it happens
-  // AFTER YouTube's own handler, ensuring our target (<ytd-app>) is final.
-  function installFullscreenClickSync() {
-    doc.addEventListener('click', (e) => {
-      const t = e.target;
-      if (!t) return;
-      const btn = t.closest?.('.ytp-fullscreen-button, button.ytp-fullscreen-button, [data-title-no-tooltip="Full screen"], [data-title-no-tooltip="Exit full screen"]');
-      if (!btn) return;
-
-      lastFsClickTime = performance.now();
-      awaitingTiming = true;
-
-      if (!settings.enableFullscreenSync) return;
-
-      if (!isBrowserFullscreen()) {
-        // ENTER: request FS on <ytd-app> after YT runs (prevents player-only FS)
-        setTimeout(requestBrowserFullscreenNow, 0);
-      } else {
-        // EXIT: exit document FS after YT runs (keeps state in sync)
-        setTimeout(exitBrowserFullscreenNow, 0);
-      }
-    }, true); // capture
-  }
-
-  // Observe YT internal fullscreen flips; keep browser FS in sync both ways.
-  function installFlexyObserver() {
-    const flexy = doc.querySelector('ytd-watch-flexy');
-    if (!flexy) return;
-    const mo = new MutationObserver((mutations) => {
-      for (const m of mutations) {
-        if (m.type === 'attributes' && m.attributeName === 'fullscreen') {
-          if (!settings.enableFullscreenSync) continue;
-
-          const isFlexyFs = flexy.hasAttribute('fullscreen');
-          // If YT ended up toggling later, ensure we still end with <ytd-app> as FS element.
-          if (isFlexyFs && !isBrowserFullscreen()) {
-            setTimeout(requestBrowserFullscreenNow, 0);
-          } else if (!isFlexyFs && isBrowserFullscreen()) {
-            setTimeout(exitBrowserFullscreenNow, 0);
-          }
-        }
-      }
-    });
-    mo.observe(flexy, { attributes: true, attributeFilter: ['fullscreen'] });
-  }
-
-  // Measure browser FS timing and show the toast (browser ms only)
-  function installTimingHooks() {
-    doc.addEventListener('fullscreenchange', () => {
-      if (!awaitingTiming) return;
-      const clickToBrowserMs = Math.round(performance.now() - lastFsClickTime);
-      showFsToastMs(clickToBrowserMs);
-      awaitingTiming = false;
-    }, { passive: true });
-  }
-
   // ---- Init + observers ----
   function init() {
     applyScrollingAttr();
     applyButtonEnabledState();
-
-    // Fullscreen sync + timing
-    installFullscreenClickSync();
-    installTimingHooks();
-
-    // flexy may mount later; keep probing a bit
-    const tryInstall = setInterval(() => {
-      installFlexyObserver();
-      if (doc.querySelector('ytd-watch-flexy')) clearInterval(tryInstall);
-    }, 300);
-    setTimeout(() => clearInterval(tryInstall), 6000);
   }
 
   doc.addEventListener('fullscreenchange', () => {
@@ -342,12 +212,10 @@
   w.addEventListener('yt-navigate-finish', () => {
     applyScrollingAttr();
     applyButtonEnabledState();
-    installFlexyObserver();
   }, { passive: true });
 
   w.addEventListener('yt-page-data-updated', () => {
     applyButtonEnabledState();
-    installFlexyObserver();
   }, { passive: true });
 
   const appObserverInterval = setInterval(() => {

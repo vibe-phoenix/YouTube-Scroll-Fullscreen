@@ -1,29 +1,42 @@
 # YouTube Scroll Fullscreen (Chrome Extension)
 
-This Chrome extension enhances YouTube’s fullscreen experience by enabling scrolling in fullscreen, and providing a configurable scroll-to-top button with customizable behavior.
+This Chrome extension enhances YouTube’s fullscreen experience by enabling **scrolling in fullscreen**, providing a **configurable scroll-to-top button** with customizable behavior, and adding a **Mini-Player toggle** button to the player controls.
 
 ---
 
 ## ✨ Features
 
-* **Flexible fullscreen layout:** Forces `display:flex` on key YouTube watch containers when fullscreen.
+* **Flexible fullscreen layout:** Forces `display:flex` on key YouTube watch containers in fullscreen.
 * **Vertical scrolling in fullscreen:** Lets you scroll through the watch page while the player stays fullscreen.
-* **Scroll-to-top button:** A floating button appears after you scroll down; clicking smoothly scrolls back to the top.
-- **Mini-Player button (optional)**: Adds a persistent control in the player UI to toggle Mini-Player (like pressing “i”).  
-  - **Default Off** — can be enabled in the Options page.
+* **Scroll-to-top button:**
 
+  * A floating button appears after you scroll down.
+  * Clicking smoothly scrolls back to the top in your chosen time.
+* **Mini-Player button (optional):**
+
+  * Adds a persistent control in the player UI to toggle Mini-Player (like pressing “i”).
+  * **Default Off** — can be enabled in the Options page.
 * **Fully configurable options page:**
 
   * Toggle the scroll-to-top button on or off.
   * Set how far (in pixels) you need to scroll before the button appears.
   * Set the scroll-back time (in seconds) for smooth scrolling.
+  * Toggle the Mini-Player button on/off.
   * Reset all settings to defaults with one click.
-
+* **Dark, centered Options UI:** Clean layout with a footer link to [VibePhoenix’s channel](https://www.youtube.com/@VibePhoenix).
 * **No data collection:** Uses only Chrome’s `storage` API to store your preferences locally or synced with your Google account.
 
 ---
 
-## 📦 Installation (Developer Mode)
+## 🚀 Install from Chrome Web Store
+
+[**➡️ Install from the Chrome Web Store**](https://chromewebstore.google.com/detail/youtube-scroll-fullscreen/aijcpilnidjiiompdjfadfhdcgljnond?authuser=1&hl=en-GB)
+
+---
+
+## 📝 Manual Installation (Developer Mode)
+
+If you’re testing or installing manually before it’s on the Chrome Web Store:
 
 1. Download or clone this repository.
 2. Open Chrome and navigate to `chrome://extensions`.
@@ -34,32 +47,33 @@ This Chrome extension enhances YouTube’s fullscreen experience by enabling scr
 
 ## 🗂 Files
 
-- `manifest.json` — MV3 manifest (host perms, storage, options).
-- `content.js` — Fullscreen scrolling + scroll-to-top logic (with user settings).
-- `styles.css` — Layout tweaks + bottom-center button styling.
-- `ytqp-mini.js` — Mini-Player toggle button (standalone, robust SPA handling).
-- `options.html`, `options.js` — Dark, centered options page (seconds & pixels, reset).
-- `background.js` — Default settings initialization.
-- `icon.png` — Toolbar/Extensions icon.
-- `privacy.html` — Static privacy policy page (no data collected).
+* `manifest.json` — MV3 manifest (host permissions, storage, options).
+* `content.js` — Handles fullscreen scrolling and scroll-to-top button logic.
+* `styles.css` — CSS tweaks for layout and button styling.
+* `ytqp-mini.js` — Mini-Player toggle button (robust SPA handling).
+* `options.html`, `options.js` — Dark, centered options page (pixels & seconds, reset).
+* `background.js` — Initializes default settings.
+* `icon.png` — Extension icon.
+* `privacy.html` — Static privacy policy page (no data collected).
 
 ---
 
 ## ⚙️ How It Works
 
-* When YouTube enters fullscreen, the extension adds a `[scrolling]` attribute to `<ytd-app>` and applies new CSS rules to allow scrolling.
-* A scroll-to-top button appears after your chosen scroll distance; clicking it smoothly scrolls back to the top in your chosen time.
+* When YouTube enters fullscreen, the extension applies its own attribute to `<ytd-app>` so CSS rules enable scrolling.
+* The scroll-to-top button appears after your chosen scroll distance; clicking it smoothly scrolls back to the top in your chosen time.
+* The Mini-Player button appears inside the player controls (if enabled).
 * All settings persist via Chrome’s storage API.
 
 ---
 
 ## 🔧 Configuration
 
-* Right-click the extension icon → **Options** (or open via Extensions → Details → Extension options).
-* Adjust the **scroll distance** (pixels) and **scroll-back time** (seconds) as you like.
-* Toggle the scroll-to-top button on/off or reset everything to defaults.
-- Toggle the **Mini-Player button** (default off).
-- Reset everything to defaults.
+* Right-click the extension icon → **Options** (or go to Extensions → Details → Extension options).
+* Adjust the **scroll distance** (pixels) and **scroll-back time** (seconds).
+* Toggle the **scroll-to-top button** on/off.
+* Toggle the **Mini-Player button** on/off.
+* Reset everything to defaults.
 
 ---
 
@@ -72,4 +86,4 @@ This Chrome extension enhances YouTube’s fullscreen experience by enabling scr
 
 ## 🔒 Privacy
 
-This extension does not collect or transmit personal data. All settings are stored locally or synced with your Google account via Chrome’s built-in storage.
+This extension does not collect or transmit any personal data. All settings are stored locally or synced with your Google account via Chrome’s built-in storage.
