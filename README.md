@@ -1,4 +1,4 @@
-# YouTube Flex Fullscreen (Chrome Extension)
+# YouTube Scroll Fullscreen (Chrome Extension)
 
 This Chrome extension enhances YouTube’s fullscreen experience by enabling scrolling in fullscreen, and providing a configurable scroll-to-top button with customizable behavior.
 
@@ -60,7 +60,7 @@ This Chrome extension enhances YouTube’s fullscreen experience by enabling scr
 ## ❌ Removal
 
 * Go to `chrome://extensions`.
-* Click **Remove** under **YouTube Flex Fullscreen**.
+* Click **Remove** under **YouTube Scroll Fullscreen**.
 
 ---
 
