@@ -1,0 +1,54 @@
+/* --- Existing fullscreen tweaks (unchanged) --- */
+ytd-watch-flexy[fullscreen] #single-column-container.ytd-watch-flexy,
+ytd-watch-flexy[fullscreen] #columns.ytd-watch-flexy {
+  display: flex !important;
+}
+ytd-app[fullscreen] { overflow: auto !important; }
+ytd-app[scrolling] {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: calc((var(--ytd-app-fullerscreen-scrollbar-width) + 1px) * -1) !important;
+  bottom: 0 !important;
+  overflow-x: auto !important;
+}
+
+/* Bottom-center button with reveal class */
+#ytfs-scroll-top-btn {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.10);
+  backdrop-filter: saturate(180%) blur(8px);
+  z-index: 2147483000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.35);
+  transition: transform 120ms ease, background 120ms ease, opacity 160ms ease;
+  opacity: 0;
+  pointer-events: none;
+}
+#ytfs-scroll-top-btn.shown {
+  opacity: 1;
+  pointer-events: auto;
+}
+#ytfs-scroll-top-btn:hover {
+  transform: translateX(-50%) translateY(-2px) scale(1.04);
+  background: rgba(255,255,255,0.16);
+}
+#ytfs-scroll-top-btn svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+  fill: currentColor;
+  color: #fff;
+}
