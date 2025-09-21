@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "YouTube Flex Fullscreen",
+  "name": "YouTube Scroll Fullscreen",
   "version": "1.0.5",
   "description": "Enables scrolling when YouTube player is in fullscreen + scroll-to-top button.",
   "permissions": ["storage"],
