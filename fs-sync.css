@@ -1,0 +1,22 @@
+/* Minimal styles for optional pre-smooth animation */
+:root {
+  --ytfs-preanim-duration: 160ms;
+  --ytfs-preanim-ease: cubic-bezier(.22,.61,.36,1);
+}
+
+/* Applied to the YouTube player container just before requesting fullscreen */
+.ytfs-preanim {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 2147483600 !important;
+  transition: transform var(--ytfs-preanim-duration) var(--ytfs-preanim-ease), opacity var(--ytfs-preanim-duration) var(--ytfs-preanim-ease);
+  transform-origin: center center;
+  opacity: 1;
+  /* Start slightly scaled then settle to 1 via JS frames for a subtle ease */
+}
+
+/* Start keyframe (set by JS, then removed next frame) */
+.ytfs-preanim-start {
+  transform: scale(0.96);
+  opacity: 0.95;
+}
