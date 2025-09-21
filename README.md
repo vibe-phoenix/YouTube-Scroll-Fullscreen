@@ -2,6 +2,8 @@
 
 This Chrome extension enhances YouTube’s fullscreen experience by enabling **scrolling in fullscreen**, providing a **configurable scroll-to-top button** with customizable behavior, and adding a **Mini-Player toggle** button to the player controls.
 
+[**Installation**](#-install-from-chrome-web-store)
+
 ---
 
 ## ✨ Features
@@ -30,7 +32,8 @@ This Chrome extension enhances YouTube’s fullscreen experience by enabling **s
 
 ## 🚀 Install from Chrome Web Store
 
-[**➡️ Install from the Chrome Web Store**](https://chromewebstore.google.com/detail/youtube-scroll-fullscreen/aijcpilnidjiiompdjfadfhdcgljnond?authuser=1&hl=en-GB)
+[**➡️ Install from the Chrome Web Store**](https://chrome.google.com/webstore/detail/your-extension-id)
+*(Replace the above link with your actual Chrome Web Store link once published)*
 
 ---
 
