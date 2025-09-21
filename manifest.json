@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "YouTube Scroll Fullscreen",
-  "version": "1.4.0",
+  "version": "1.1.0",
   "description": "Enhances YouTube’s fullscreen experience by enabling scrolling in fullscreen and providing a configurable scroll-to-top button. Also adds an optional Mini-Player toggle button.",
   "permissions": ["storage"],
   "host_permissions": ["https://www.youtube.com/*"],
