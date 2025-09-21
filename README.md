@@ -15,7 +15,7 @@ This Chrome extension enhances YouTube’s fullscreen experience by enabling fle
   * Set how far (in pixels) you need to scroll before the button appears.
   * Set the scroll-back time (in seconds) for smooth scrolling.
   * Reset all settings to defaults with one click.
-* **Dark themed options UI:** Clean centered panel with “made by vibephoenix” footer linking to [VibePhoenix YouTube channel](https://www.youtube.com/@VibePhoenix).
+
 * **No data collection:** Uses only Chrome’s `storage` API to store your preferences locally or synced with your Google account.
 
 ---
