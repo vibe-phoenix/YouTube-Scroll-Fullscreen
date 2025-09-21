@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "YouTube Scroll Fullscreen",
-  "version": "1.0.5",
-  "description": "Enables scrolling when YouTube player is in fullscreen + scroll-to-top button.",
+  "version": "1.4.0",
+  "description": "Enhances YouTube’s fullscreen experience by enabling scrolling in fullscreen and providing a configurable scroll-to-top button. Also adds an optional Mini-Player toggle button.",
   "permissions": ["storage"],
   "host_permissions": ["https://www.youtube.com/*"],
   "icons": {
@@ -17,6 +17,11 @@
       "js": ["content.js"],
       "css": ["styles.css"],
       "run_at": "document_start"
+    },
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": ["ytqp-mini.js"],
+      "run_at": "document_idle"
     }
   ],
   "options_ui": {

@@ -2,15 +2,17 @@ const $ = (s) => document.querySelector(s);
 const show = $('#showBtn');
 const dur = $('#duration');
 const thr = $('#threshold');
+const miniPlayerChk = $('#enableMiniPlayer');
 const saved = $('#saved');
 const resetBtn = $('#resetBtn');
 const footerLink = $('#footerLink');
 
-// Defaults
+// Defaults (keep in sync with background.js)
 const defaults = {
   showScrollTop: true,
-  scrollDuration: 500,  // ms internally
-  scrollShowThreshold: 120 // px internally
+  scrollDuration: 500,     // ms (display as seconds)
+  scrollShowThreshold: 120, // px
+  enableMiniPlayer: false
 };
 
 function flashSaved() {
@@ -20,17 +22,19 @@ function flashSaved() {
 
 async function restore() {
   const stored = await chrome.storage.sync.get(Object.keys(defaults));
-  const showScrollTop = stored.showScrollTop !== undefined ? stored.showScrollTop : defaults.showScrollTop;
-  const scrollDuration = stored.scrollDuration !== undefined ? stored.scrollDuration : defaults.scrollDuration;
-  const scrollShowThreshold = stored.scrollShowThreshold !== undefined ? stored.scrollShowThreshold : defaults.scrollShowThreshold;
+  const showScrollTop = stored.showScrollTop ?? defaults.showScrollTop;
+  const scrollDuration = stored.scrollDuration ?? defaults.scrollDuration;
+  const scrollShowThreshold = stored.scrollShowThreshold ?? defaults.scrollShowThreshold;
+  const enableMiniPlayer = stored.enableMiniPlayer ?? defaults.enableMiniPlayer;
 
   show.checked = !!showScrollTop;
   dur.value = (scrollDuration / 1000).toFixed(2).replace(/\.?0+$/, ''); // seconds
   thr.value = scrollShowThreshold; // pixels
+  miniPlayerChk.checked = !!enableMiniPlayer;
 }
 
 async function persist() {
-  // convert seconds to ms
+  // seconds -> ms
   let sec = parseFloat(dur.value);
   if (!Number.isFinite(sec)) sec = defaults.scrollDuration / 1000;
   sec = Math.min(5, Math.max(0.1, sec));
@@ -47,7 +51,8 @@ async function persist() {
   await chrome.storage.sync.set({
     showScrollTop: show.checked,
     scrollDuration: ms,
-    scrollShowThreshold: px
+    scrollShowThreshold: px,
+    enableMiniPlayer: miniPlayerChk.checked
   });
   flashSaved();
 }
@@ -62,9 +67,10 @@ document.addEventListener('DOMContentLoaded', restore);
 show.addEventListener('change', persist);
 dur.addEventListener('change', persist);
 thr.addEventListener('change', persist);
+miniPlayerChk.addEventListener('change', persist);
 resetBtn.addEventListener('click', resetDefaults);
 
 // Footer link
 footerLink.addEventListener('click', () => {
-  chrome.tabs.create({ url: 'https://www.youtube.com/@VibePhoenix.' });
+  chrome.tabs.create({ url: 'https://www.youtube.com/@VibePhoenix' });
 });

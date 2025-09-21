@@ -64,6 +64,7 @@
       </svg>
     `;
 
+    // Shield events so YT overlay doesn't swallow them in fullscreen
     btn.addEventListener('pointerdown', (e) => { e.stopPropagation(); }, true);
     btn.addEventListener('click', (e) => {
       e.stopPropagation();

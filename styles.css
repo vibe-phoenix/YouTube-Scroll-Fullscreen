@@ -1,9 +1,13 @@
-/* --- Existing fullscreen tweaks (unchanged) --- */
+/* --- Existing: Layout tweaks in fullscreen --- */
 ytd-watch-flexy[fullscreen] #single-column-container.ytd-watch-flexy,
 ytd-watch-flexy[fullscreen] #columns.ytd-watch-flexy {
   display: flex !important;
 }
+
+/* Allow scrolling while fullscreen */
 ytd-app[fullscreen] { overflow: auto !important; }
+
+/* When we explicitly mark the app as 'scrolling', pin to edges and allow horizontal scroll */
 ytd-app[scrolling] {
   position: absolute !important;
   top: 0 !important;
@@ -13,7 +17,7 @@ ytd-app[scrolling] {
   overflow-x: auto !important;
 }
 
-/* Bottom-center button with reveal class */
+/* --- Bottom-center scroll-to-top button with reveal class --- */
 #ytfs-scroll-top-btn {
   position: fixed;
   bottom: 24px;

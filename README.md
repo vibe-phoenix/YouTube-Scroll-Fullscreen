@@ -9,6 +9,9 @@ This Chrome extension enhances YouTube’s fullscreen experience by enabling scr
 * **Flexible fullscreen layout:** Forces `display:flex` on key YouTube watch containers when fullscreen.
 * **Vertical scrolling in fullscreen:** Lets you scroll through the watch page while the player stays fullscreen.
 * **Scroll-to-top button:** A floating button appears after you scroll down; clicking smoothly scrolls back to the top.
+- **Mini-Player button (optional)**: Adds a persistent control in the player UI to toggle Mini-Player (like pressing “i”).  
+  - **Default Off** — can be enabled in the Options page.
+
 * **Fully configurable options page:**
 
   * Toggle the scroll-to-top button on or off.
@@ -31,13 +34,14 @@ This Chrome extension enhances YouTube’s fullscreen experience by enabling scr
 
 ## 🗂 Files
 
-* **`manifest.json`** — MV3 manifest with host/storage permissions and options page.
-* **`content.js`** — Injected script that toggles fullscreen scrolling and manages the scroll-to-top button.
-* **`styles.css`** — Injected CSS for fullscreen layout tweaks and button styling.
-* **`options.html`** — Dark UI for user settings.
-* **`options.js`** — Handles saving/loading/resetting user preferences.
-* **`background.js`** — Initializes default settings.
-* **`icon.png`** — The extension’s icon shown in the toolbar and Extensions page.
+- `manifest.json` — MV3 manifest (host perms, storage, options).
+- `content.js` — Fullscreen scrolling + scroll-to-top logic (with user settings).
+- `styles.css` — Layout tweaks + bottom-center button styling.
+- `ytqp-mini.js` — Mini-Player toggle button (standalone, robust SPA handling).
+- `options.html`, `options.js` — Dark, centered options page (seconds & pixels, reset).
+- `background.js` — Default settings initialization.
+- `icon.png` — Toolbar/Extensions icon.
+- `privacy.html` — Static privacy policy page (no data collected).
 
 ---
 
@@ -54,6 +58,8 @@ This Chrome extension enhances YouTube’s fullscreen experience by enabling scr
 * Right-click the extension icon → **Options** (or open via Extensions → Details → Extension options).
 * Adjust the **scroll distance** (pixels) and **scroll-back time** (seconds) as you like.
 * Toggle the scroll-to-top button on/off or reset everything to defaults.
+- Toggle the **Mini-Player button** (default off).
+- Reset everything to defaults.
 
 ---
 
