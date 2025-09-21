@@ -1,4 +1,4 @@
-
+# YouTube Flex Fullscreen (Chrome Extension)
 
 This Chrome extension enhances YouTube’s fullscreen experience by enabling flexible layouts, allowing scrolling in fullscreen, and providing a configurable scroll-to-top button with customizable behavior.
 
