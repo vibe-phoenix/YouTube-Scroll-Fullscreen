@@ -33,7 +33,6 @@ This Chrome extension enhances YouTube’s fullscreen experience by enabling **s
 ## 🚀 Install from Chrome Web Store
 
 [**➡️ Install from the Chrome Web Store**](https://chrome.google.com/webstore/detail/your-extension-id)
-*(Replace the above link with your actual Chrome Web Store link once published)*
 
 ---
 
