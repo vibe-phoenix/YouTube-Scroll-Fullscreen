@@ -32,7 +32,7 @@ This Chrome extension enhances YouTube’s fullscreen experience by enabling **s
 
 ## 🚀 Install from Chrome Web Store
 
-[**➡️ Install from the Chrome Web Store**](https://chrome.google.com/webstore/detail/your-extension-id)
+[**➡️ Install from the Chrome Web Store**](https://chromewebstore.google.com/detail/youtube-scroll-fullscreen/aijcpilnidjiiompdjfadfhdcgljnond?authuser=1&hl=en-GB)
 
 ---
 
